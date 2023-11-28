@@ -18,6 +18,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -124,6 +127,16 @@ fun TaskListItem(task: Task, taskViewModel: TaskViewModel, onTaskClicked: (Int) 
                         },
                     style = if (task.isCompleted) TextStyle.Default.copy(textDecoration = TextDecoration.LineThrough) else TextStyle.Default
                 )
+                Button(onClick = {
+                    taskViewModel.deleteTask(task.id)
+                }) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
+                }
+                Button(onClick = {
+                    onTaskClicked(task.id)
+                }) {
+                    Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White)
+                }
             }
 
             if (task.isCompleted) {

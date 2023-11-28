@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                         HomePage(
                             taskViewModel = taskViewModel,
                             navigateToCreateTask = { navController.navigate("create_task_screen") },
-                            onTaskClicked = { taskId -> navController.navigate("edit_task_screen/$taskId") }
+                            onTaskClicked = { navController.navigate("edit_task_screen/$taskId") }
                         )
                     }
 
