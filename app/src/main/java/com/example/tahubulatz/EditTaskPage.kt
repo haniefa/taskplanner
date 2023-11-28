@@ -1,6 +1,7 @@
 package com.example.tahubulatz
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -33,6 +35,7 @@ fun EditTaskPage(
     onNavigateUp: () -> Unit
 ) {
     val task by taskViewModel.tasks.collectAsState()
+    val mContext = LocalContext.current
     val editedTask = remember { taskViewModel.getTaskById(taskId) }
     Log.d("EditTaskPage", "taskId: $taskId")
     if (editedTask != null) {
@@ -64,12 +67,14 @@ fun EditTaskPage(
                         )
                         onTaskUpdated(updatedTask)
                         onNavigateUp()
+                        Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
                     }) {
                         Text("Save")
                     }
                     TextButton(onClick = {
                         onTaskDeleted(taskId)
                         onNavigateUp()
+                        Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
                     }) {
                         Text("Delete")
                     }

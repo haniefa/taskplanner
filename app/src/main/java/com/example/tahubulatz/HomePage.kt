@@ -2,6 +2,7 @@ package com.example.tahubulatz
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -74,7 +76,7 @@ fun TaskList(tasks: List<Task>, taskViewModel: TaskViewModel ,onTaskClicked: (In
 fun TaskListItem(task: Task, taskViewModel: TaskViewModel, onTaskClicked: (Int) -> Unit) {
     // Check if the task deadline is today or has passed
     val isDeadlinePassed = isTaskDeadlinePast(task.deadline)
-
+    val mContext = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -113,6 +115,7 @@ fun TaskListItem(task: Task, taskViewModel: TaskViewModel, onTaskClicked: (Int) 
                 )
                 Button(onClick = {
                     taskViewModel.deleteTask(task.id)
+                    Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
                 }) {
                     Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
                 }

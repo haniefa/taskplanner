@@ -1,11 +1,13 @@
 package com.example.tahubulatz
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
@@ -21,7 +23,7 @@ fun CreateTaskPage(
     var taskName by remember { mutableStateOf("") }
     var taskDeadline by remember { mutableStateOf("") }
     var taskDetails by remember { mutableStateOf("") }
-
+    val mContext = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,6 +49,7 @@ fun CreateTaskPage(
                     taskViewModel.addTask(newTask)
                     Log.d("CreateTaskPage", "taskId: ${newTask.id}")
                     onNavigateUp()
+                    Toast.makeText(mContext, "Task Created", Toast.LENGTH_LONG).show()
                 }) {
                     Text("Create")
                 }
