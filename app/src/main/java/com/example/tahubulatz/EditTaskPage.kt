@@ -2,6 +2,8 @@ package com.example.tahubulatz
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -42,72 +45,82 @@ fun EditTaskPage(
         var editedName by remember { mutableStateOf(editedTask.name) }
         var editedDeadline by remember { mutableStateOf(convertMillisToDateString(editedTask.deadline)) }
         var editedDetails by remember { mutableStateOf(editedTask.details) }
-
-        Column(
+        // Top bar
+        TopAppBar(
+            title = { Text(text = "Edit Task") },
+            navigationIcon = {
+                TextButton(onClick = { onNavigateUp() }) {
+                    Text("Cancel")
+                }
+            },
+            actions = {
+                TextButton(onClick = {
+                    val updatedTask = Task(
+                        id = editedTask.id,
+                        name = editedName,
+                        deadline = convertDateStringToMillis(editedDeadline),
+                        isCompleted = editedTask.isCompleted,
+                        details = editedDetails
+                    )
+                    onTaskUpdated(updatedTask)
+                    onNavigateUp()
+                    Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
+                }) {
+                    Text("Save")
+                }
+                TextButton(onClick = {
+                    onTaskDeleted(taskId)
+                    onNavigateUp()
+                    Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
+                }) {
+                    Text("Delete")
+                }
+            }
+        )
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            // Top bar
-            TopAppBar(
-                title = { Text(text = "Edit Task") },
-                navigationIcon = {
-                    TextButton(onClick = { onNavigateUp() }) {
-                        Text("Cancel")
-                    }
-                },
-                actions = {
-                    TextButton(onClick = {
-                        val updatedTask = Task(
-                            id = editedTask.id,
-                            name = editedName,
-                            deadline = convertDateStringToMillis(editedDeadline),
-                            isCompleted = editedTask.isCompleted,
-                            details = editedDetails
-                        )
-                        onTaskUpdated(updatedTask)
-                        onNavigateUp()
-                        Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
-                    }) {
-                        Text("Save")
-                    }
-                    TextButton(onClick = {
-                        onTaskDeleted(taskId)
-                        onNavigateUp()
-                        Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
-                    }) {
-                        Text("Delete")
-                    }
-                }
-            )
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Editable fields
-            OutlinedTextField(
-                value = editedName,
-                onValueChange = { editedName = it },
-                label = { Text("Task Name") }
-            )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                // Editable fields
+                OutlinedTextField(
+                    value = editedName,
+                    onValueChange = { editedName = it },
+                    label = { Text("Task Name") }
+                )
 
-            // Deadline Text Field
-            OutlinedTextField(
-                value = editedDeadline,
-                onValueChange = { editedDeadline = it },
-                label = { Text("Deadline Date (YYYY-MM-DD)") }
-            )
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                // Deadline Text Field
+                OutlinedTextField(
+                    value = editedDeadline,
+                    onValueChange = { editedDeadline = it },
+                    label = { Text("Deadline Date (YYYY-MM-DD)") }
+                )
 
-            OutlinedTextField(
-                value = editedDetails,
-                onValueChange = { editedDetails = it },
-                label = { Text("Details") },
-                maxLines = 5
-            )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = editedDetails,
+                    onValueChange = { editedDetails = it },
+                    label = { Text("Details") },
+                    maxLines = 5
+                )
+            }
         }
+
     }
 }
 

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +28,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,16 +52,37 @@ fun HomePage(
 ) {
     val tasks by taskViewModel.tasks.collectAsState()
 
-    Scaffold(
-        topBar = {},
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navigateToCreateTask() }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Task")
-            }
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Column {
-            TaskList(tasks = tasks, taskViewModel ,onTaskClicked = onTaskClicked)
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    modifier = Modifier,
+                    title = { Text(text = "TASK PLANNER") }
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    modifier = Modifier.padding(20.dp),
+                    onClick = { navigateToCreateTask() }) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Task")
+                }
+            }
+        ) {
+
+            Column (
+                modifier = Modifier
+                    .padding(20.dp)
+            ){
+                Spacer(modifier = Modifier.height(30.dp))
+                TaskList(
+                    tasks = tasks, taskViewModel, onTaskClicked = onTaskClicked)
+            }
         }
     }
 }
@@ -113,17 +138,20 @@ fun TaskListItem(task: Task, taskViewModel: TaskViewModel, onTaskClicked: (Int) 
                         },
                     style = if (task.isCompleted) TextStyle.Default.copy(textDecoration = TextDecoration.LineThrough) else TextStyle.Default
                 )
-                Button(onClick = {
-                    taskViewModel.deleteTask(task.id)
-                    Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
-                }) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
+                Row(modifier = Modifier.padding(8.dp)) {
+                    Button(modifier = Modifier.padding(8.dp), onClick = {
+                        taskViewModel.deleteTask(task.id)
+                        Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
+                    }) {
+                        Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
+                    }
+                    Button(modifier = Modifier.padding(8.dp), onClick = {
+                        onTaskClicked(task.id)
+                    }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White)
+                    }
                 }
-                Button(onClick = {
-                    onTaskClicked(task.id)
-                }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White)
-                }
+
             }
 
             if (task.isCompleted) {
