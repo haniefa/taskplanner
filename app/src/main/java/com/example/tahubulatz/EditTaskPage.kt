@@ -33,7 +33,7 @@ fun EditTaskPage(
     onNavigateUp: () -> Unit
 ) {
     val task by taskViewModel.tasks.collectAsState()
-    val editedTask = remember { task.firstOrNull { it.id == taskId } }
+    val editedTask = remember { taskViewModel.getTaskById(taskId) }
     Log.d("EditTaskPage", "taskId: $taskId")
     if (editedTask != null) {
         var editedName by remember { mutableStateOf(editedTask.name) }
@@ -63,10 +63,14 @@ fun EditTaskPage(
                             details = editedDetails
                         )
                         onTaskUpdated(updatedTask)
+                        onNavigateUp()
                     }) {
                         Text("Save")
                     }
-                    TextButton(onClick = { onTaskDeleted(taskId) }) {
+                    TextButton(onClick = {
+                        onTaskDeleted(taskId)
+                        onNavigateUp()
+                    }) {
                         Text("Delete")
                     }
                 }
@@ -101,7 +105,6 @@ fun EditTaskPage(
         }
     }
 }
-
 
 // Convert date string to milliseconds
 private fun convertDateStringToMillis(date: String): Long {

@@ -23,8 +23,8 @@ class TaskViewModel : ViewModel() {
     private val _taskId = mutableStateOf<Int?>(null)
     val taskId: State<Int?> = _taskId
 
-    fun setTaskId(id: Int) {
-        _taskId.value = id
+    fun getTaskById(id: Int?): Task? {
+        return _tasks.value.find { it.id == id }
     }
 
     fun addTask(task: Task) {
@@ -40,6 +40,7 @@ class TaskViewModel : ViewModel() {
             }
         }
     }
+
 
     fun deleteTask(taskId: Int) {
         viewModelScope.launch {
