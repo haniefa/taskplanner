@@ -45,6 +45,7 @@ fun CreateTaskPage(
                         details = taskDetails
                     )
                     taskViewModel.addTask(newTask)
+                    Log.d("CreateTaskPage", "taskId: $newTask.id")
                     onNavigateUp()
                 }) {
                     Text("Create")
