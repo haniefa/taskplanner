@@ -5,10 +5,14 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
@@ -48,33 +53,37 @@ fun EditTaskPage(
         // Top bar
         TopAppBar(
             title = { Text(text = "Edit Task") },
+            modifier = Modifier.shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(0.dp)
+            ),
             navigationIcon = {
-                TextButton(onClick = { onNavigateUp() }) {
-                    Text("Cancel")
-                }
+//                TextButton(onClick = { onNavigateUp() }) {
+//                    Text("Cancel")
+//                }
             },
             actions = {
-                TextButton(onClick = {
-                    val updatedTask = Task(
-                        id = editedTask.id,
-                        name = editedName,
-                        deadline = convertDateStringToMillis(editedDeadline),
-                        isCompleted = editedTask.isCompleted,
-                        details = editedDetails
-                    )
-                    onTaskUpdated(updatedTask)
-                    onNavigateUp()
-                    Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
-                }) {
-                    Text("Save")
-                }
-                TextButton(onClick = {
-                    onTaskDeleted(taskId)
-                    onNavigateUp()
-                    Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
-                }) {
-                    Text("Delete")
-                }
+//                TextButton(onClick = {
+//                    val updatedTask = Task(
+//                        id = editedTask.id,
+//                        name = editedName,
+//                        deadline = convertDateStringToMillis(editedDeadline),
+//                        isCompleted = editedTask.isCompleted,
+//                        details = editedDetails
+//                    )
+//                    onTaskUpdated(updatedTask)
+//                    onNavigateUp()
+//                    Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
+//                }) {
+//                    Text("Save")
+//                }
+//                TextButton(onClick = {
+//                    onTaskDeleted(taskId)
+//                    onNavigateUp()
+//                    Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
+//                }) {
+//                    Text("Delete")
+//                }
             }
         )
         Box(
@@ -97,6 +106,7 @@ fun EditTaskPage(
                 // Editable fields
                 OutlinedTextField(
                     value = editedName,
+                    shape = RoundedCornerShape(18.dp),
                     onValueChange = { editedName = it },
                     label = { Text("Task Name") }
                 )
@@ -106,6 +116,7 @@ fun EditTaskPage(
                 // Deadline Text Field
                 OutlinedTextField(
                     value = editedDeadline,
+                    shape = RoundedCornerShape(18.dp),
                     onValueChange = { editedDeadline = it },
                     label = { Text("Deadline Date (YYYY-MM-DD)") }
                 )
@@ -114,11 +125,61 @@ fun EditTaskPage(
 
                 OutlinedTextField(
                     value = editedDetails,
+                    shape = RoundedCornerShape(18.dp),
                     onValueChange = { editedDetails = it },
                     label = { Text("Details") },
                     maxLines = 5
                 )
+
+                Row(
+                    modifier = Modifier.padding(0.dp, 20.dp)
+                ) {
+                    TextButton(
+                        modifier = Modifier
+                            .height(52.dp)
+                            .width(150.dp)
+                            .padding(10.dp, 0.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(16.dp),
+                            ),
+                        colors = ButtonDefaults.buttonColors(),
+                        shape = RoundedCornerShape(18.dp),
+                        onClick = {
+                        val updatedTask = Task(
+                            id = editedTask.id,
+                            name = editedName,
+                            deadline = convertDateStringToMillis(editedDeadline),
+                            isCompleted = editedTask.isCompleted,
+                            details = editedDetails
+                        )
+                        onTaskUpdated(updatedTask)
+                        onNavigateUp()
+                        Toast.makeText(mContext, "Task Updated", Toast.LENGTH_LONG).show()
+                    }) {
+                        Text("Save")
+                    }
+                    TextButton(
+                        modifier = Modifier
+                            .height(52.dp)
+                            .width(150.dp)
+                            .padding(10.dp, 0.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(16.dp),
+                            ),
+                        colors = ButtonDefaults.buttonColors(),
+                        shape = RoundedCornerShape(18.dp),
+                        onClick = {
+                        onTaskDeleted(taskId)
+                        onNavigateUp()
+                        Toast.makeText(mContext, "Task Deleted", Toast.LENGTH_LONG).show()
+                    }) {
+                        Text("Delete")
+                    }
+                }
             }
+
         }
 
     }
