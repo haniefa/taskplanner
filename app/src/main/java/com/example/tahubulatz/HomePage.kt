@@ -69,8 +69,9 @@ fun HomePage(
             floatingActionButton = {
                 FloatingActionButton(
                     modifier = Modifier.padding(20.dp),
-                    onClick = { navigateToCreateTask() }) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Task")
+                    onClick = { navigateToCreateTask() },
+                    containerColor = Color(0xFF5B3A1B) ){
+                    Icon(Icons.Default.Add, contentDescription = "Add Task", tint = Color(0xFFFAE0C9))
                 }
             }
         ) {
